@@ -18,10 +18,12 @@ var bomb = new Image();
 bomb.src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Bomb.png?raw=true";
 var background = new Image();
 background.src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Background.png?raw=true";
-var waves = new Image();
-waves.src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Waves.png?raw=true";
-var water = new Image();
-water.src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Water.png?raw=true";
+
+var water = [];
+for (var i = 0; i < 8; i++) {
+if(i < 5){water[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Water.png?raw=true";}
+else{water[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Waves.png?raw=true";}
+}
     
 var explosionGIF = []; //length: 0.912 - 400x400 px - 20 frames - 45.6ms
 var explosionInc = 5;
@@ -81,6 +83,11 @@ var draw = function () {
     ctx.drawImage(splashGIF[Math.floor(splashInc/5)], 300, 100, 100, 100);
     splashInc++;
     if(Math.floor(splashInc/5) > 44){splashInc = 5; splashBool = false;}
+    }
+    
+    for (var i = 0; i < 8; i++) {
+        if(i < 5){ctx.drawImage(water[i], (i+1)*256, 900-512, 256, 256);}
+        else{ctx.drawImage(water[i], (i+1)*256, 900-256, 256, 256);}
     }
 }
 setInterval(draw, 10);
