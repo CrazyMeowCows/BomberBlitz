@@ -20,10 +20,16 @@ var background = new Image();
 background.src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Background.png?raw=true";
 
 var water = [];
-for (var i = 0; i < 15; i++) {
+for (var i = 0; i <= 31; i += 2) {
 water[i] = new Image();
-if(i < 8){water[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Waves.png?raw=true";}
-else{water[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Water.png?raw=true";}
+if(i < 16){
+    water[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Waves.png?raw=true";
+    water[i+1] = i/2*256;
+}
+else{
+    water[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Water.png?raw=true";
+    water[i+1] = (i-16)/2*256;
+}
 }
     
 var explosionGIF = []; //length: 0.912 - 400x400 px - 20 frames - 45.6ms
@@ -31,7 +37,7 @@ var explosionInc = 5;
 var explosionBool = false;
 for (var i = 1; i < 21; i++) {
   explosionGIF[i] = new Image();
-  explosionGIF[i].src = "Explosion/explosion ("+i+").png";
+  explosionGIF[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Explosion/explosion%20("+i+").png?raw=true";
 }    
 
 var airburstGIF = []; //length: 0.426 - 546x397 px - 10 frames - 42.6ms
@@ -39,7 +45,7 @@ var airburstInc = 4;
 var airburstBool = false;
 for (var i = 1; i < 11; i++) {
   airburstGIF[i] = new Image();
-  airburstGIF[i].src = "Airburst/airburst ("+i+").png";
+  airburstGIF[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Airburst/airburst%20("+i+").png?raw=true";
 } 
 
 var hitGIF = []; //length: 0.7275 - 800x600 px - 24 frames
@@ -47,7 +53,7 @@ var hitInc = 3;
 var hitBool = false;
 for (var i = 1; i < 25; i++) {
   hitGIF[i] = new Image();
-  hitGIF[i].src = "Hit/hit ("+i+").png";
+  hitGIF[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Hit/hit%20("+i+").png?raw=true";
 }     
     
 var splashGIF = []; //length: 2.49 - 600x500 px - 44 frames
@@ -55,7 +61,7 @@ var splashInc = 5;
 var splashBool = false;
 for (var i = 1; i < 45; i++) {
   splashGIF[i] = new Image();
-  splashGIF[i].src = "Splash/splash ("+i+").png";
+  splashGIF[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Splash/splash%20("+i+").png?raw=true";
 } 
 
     
@@ -86,9 +92,11 @@ var draw = function () {
     if(Math.floor(splashInc/5) > 44){splashInc = 5; splashBool = false;}
     }
     
-    for (var i = 0; i < 15; i++) {
-        if(i < 8){ctx.drawImage(water[i], i*255, 900-512, 256, 256);}
-        else{ctx.drawImage(water[i], (i-8)*256, 900-256, 256, 256);}
+    for (var i = 0; i <= 31; i += 2) {
+        if(i < 16){ctx.drawImage(water[i], water[i+1], 900-512, 256, 256);}
+        else{ctx.drawImage(water[i], water[i+1], 900-256, 256, 256);}
+        water[i+1]--;
+        if(water[i+1] <= -256){water[i+1] += 16256;}
     }
 }
 setInterval(draw, 10);
