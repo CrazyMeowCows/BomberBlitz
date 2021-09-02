@@ -11,25 +11,26 @@ ctx = canvas.getContext('2d');
 canvas.style = "position:absolute; left: 50%; margin-left: -800px;";
     
 var ship = new Image();
-ship.src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Ship.png?raw=true";
+var shipDir = "R";
+var shipPos = 0;
+    
 var plane = new Image();
 plane.src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Plane.png?raw=true";
 var bomb = new Image();
 bomb.src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Bomb.png?raw=true";
-var background = new Image();
-background.src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Background.png?raw=true";
+    
+var background = [];
+for (var i = 0; i <= 2; i += 2){
+    background[i] = new Image();
+    background[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Background.png?raw=true";
+    background[i+1] = (i-2)/2*1600
+}
 
 var water = [];
 for (var i = 0; i <= 31; i += 2) {
 water[i] = new Image();
-if(i < 16){
-    water[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Waves.png?raw=true";
-    water[i+1] = i/2*256;
-}
-else{
-    water[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Water.png?raw=true";
-    water[i+1] = (i-16)/2*256;
-}
+if(i < 16){water[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Waves.png?raw=true"; water[i+1] = i/2*256;}
+else{water[i].src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Water.png?raw=true"; water[i+1] = (i-16)/2*256;}
 }
     
 var explosionGIF = []; //length: 0.912 - 400x400 px - 20 frames - 45.6ms
@@ -66,7 +67,19 @@ for (var i = 1; i < 45; i++) {
 
     
 var draw = function () {
-    ctx.drawImage(background, 0, 0, 1600, 900);
+    ctx.clearRect(0, 0, 1600, 900);
+    for (var i = 0; i <= 2; i += 2){
+    ctx.drawImage(background[i], background[i+1], 0, 1600, 900);
+    background[i+1] += 0.1;
+    if(background[i+1] > 1600){background[i+1] -= 3200;}
+    }
+    
+    ship.src = "https://github.com/CrazyMeowCows/BomberBlitz/blob/main/Ship"+shipDir+".png?raw=true";
+    ctx.drawImage(ship, shipPos, 520, 476, 77);
+    if(shipDir == "R"){shipPos += 1;}
+    else{shipPos -= 1;}
+    if(shipPos <= 0){shipDir = "R";}
+    else if(shipPos >= 1080){shipDir = "L";}
     
     if(explosionBool){
     ctx.drawImage(explosionGIF[Math.floor(explosionInc/5)], 100, 100, 100, 100);
@@ -95,21 +108,12 @@ var draw = function () {
     for (var i = 0; i <= 31; i += 2) {
         if(i < 16){ctx.drawImage(water[i], water[i+1], 900-512, 256, 256);}
         else{ctx.drawImage(water[i], water[i+1], 900-256, 256, 256);}
-        water[i+1]--;
-        if(water[i+1] <= -256){water[i+1] += 16256;}
+        water[i+1] -= 0.1;
+        if(water[i+1] <= -256){water[i+1] += 1856;}
     }
 }
 setInterval(draw, 10);
-    
-function IsImageOk(img) {
-    if (!img.complete) {
-        return false;
-    }
-    if (img.naturalWidth === 0) {
-        return false;
-    }
-    return true;
-}
+
     
 var keyNames = {65: "left", 68: "right"};
 var key = null;
